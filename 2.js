@@ -79,6 +79,51 @@ function choiceSort(arr) {
 
 
 // 简单快速排序
-function quickSort() {
-  
+function quickSort0(arr) {
+  if (arr == null || arr.length === 0) return []
+  // 小的放左边，大的放右边
+  var leader = arr[0]
+  var left = []
+  var right = []
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < leader) {
+      left.push(arr[i])
+    } else {
+      right.push(arr[i])
+    }
+  }
+  left = quickSort0(left)
+  right = quickSort0(right)
+  left.push(leader)
+  return left.concat(right)
 }
+// console.log(quickSort0(arr))
+
+// 标准快速排序
+
+function swap(arr, a, b)  {
+  var temp = arr[a]
+  arr[a] = arr[b]
+  arr[b] = temp
+}
+function standard(arr, begin, end) {
+  if (begin >= end - 1) return
+  // 左指针
+  var left = begin
+  // 右指针
+  var right = end
+  do {
+    do left ++; while (left < right && arr[left] < arr[begin])
+    do right --; while (right > left && arr[right] > arr[begin])
+    if (left < right) swap(arr, left, right)
+  } while (left < right);
+  var swapPoint = left == right ? right - 1 : right
+  swap(arr, begin, swapPoint)
+  standard(arr, begin, swapPoint)
+  standard(arr, swapPoint + 1, end)
+}
+function quickSort(arr) {
+  standard(arr, 0, arr.length)
+}
+quickSort(arr)
+console.log(arr)
